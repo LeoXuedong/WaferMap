@@ -3,7 +3,7 @@
 离线单页 Web 应用：把晶圆膜厚测量数据变成可交互的 **WaferMap / 等值线 / 剖面曲线 / 统计视图**。
 双击 `index.html` 即可运行 —— **不装软件、不联网、不依赖服务器**，适合产线与涉密机器。
 
-![version](https://img.shields.io/badge/version-v1.0.1-blue) ![offline](https://img.shields.io/badge/offline-file%3A%2F%2F-success) ![tests](https://img.shields.io/badge/tests-103%20assertions-brightgreen)
+![version](https://img.shields.io/badge/version-v1.0.1-blue) ![offline](https://img.shields.io/badge/offline-file%3A%2F%2F-success) ![tests](https://img.shields.io/badge/tests-104%20assertions-brightgreen)
 
 ## 特性
 
@@ -29,7 +29,7 @@
 
 ## 快速开始
 
-1. 解压 `WaferMap-v1.0.1.zip`
+1. `git clone https://github.com/LeoXuedong/WaferMap.git`（或下载源码 ZIP 解压）
 2. 双击 `index.html`（Edge / Chrome 均可）
 3. 点顶部「导入数据」，选择你的 CSV / Excel 文件
 
