@@ -6,12 +6,12 @@ import sys
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-VERSION = "v1.0.1"
+VERSION = "v1.0.2"
 TOP = "WaferMap"                                   # zip 内层根目录
 ZIP = os.path.join(os.path.dirname(ROOT), "WaferMap-%s.zip" % VERSION)
 
 INCLUDE_DIRS = ["css", "js", "data", "vendor", "tests", "docs"]
-INCLUDE_FILES = ["index.html", "使用说明.md"]
+INCLUDE_FILES = ["index.html", "README.md", "使用说明.md"]
 EXCLUDE_PARTS = {"shots", "build", "__pycache__"}
 
 
@@ -27,6 +27,9 @@ def collect():
                 full = os.path.join(base, fn)
                 rel = os.path.relpath(full, ROOT).replace("\\", "/")
                 if any((p in EXCLUDE_PARTS) or p.startswith("dl") for p in rel.split("/")):
+                    continue
+                # 测试夹具由 tests/make_fixtures.js 生成，发布包不带
+                if rel.startswith("tests/fixtures/"):
                     continue
                 items.append(rel)
     return items
@@ -70,9 +73,9 @@ print("hash diff:", bad if bad else "none (%d files identical)" % len(items))
 
 need = ["index.html", "css/app.css", "js/app.js", "js/views.js", "js/charts.js",
         "js/wafer.js", "js/export.js", "js/core.js", "js/stats.js",
-        "data/demo.js", "data/trend_demo_10P.csv",
         "vendor/echarts.min.js", "vendor/xlsx.full.min.js",
-        "tests/fixtures/multi_sheet.xlsx", "使用说明.md", "docs/开发记录.md"]
+        "tests/helpers/synthetic.js", "tests/helpers/datafile.js",
+        "使用说明.md", "docs/开发记录.md", "README.md"]
 missing = [n for n in need if not os.path.exists(os.path.join(DEST, TOP, n))]
 print("required missing:", missing if missing else "none")
 print("unpacked to:", os.path.join(DEST, TOP))

@@ -3,7 +3,7 @@
 离线单页 Web 应用：把晶圆膜厚测量数据变成可交互的 **WaferMap / 等值线 / 剖面曲线 / 统计视图**。
 双击 `index.html` 即可运行 —— **不装软件、不联网、不依赖服务器**，适合产线与涉密机器。
 
-![version](https://img.shields.io/badge/version-v1.0.1-blue) ![offline](https://img.shields.io/badge/offline-file%3A%2F%2F-success) ![tests](https://img.shields.io/badge/tests-104%20assertions-brightgreen)
+![version](https://img.shields.io/badge/version-v1.0.2-blue) ![offline](https://img.shields.io/badge/offline-file%3A%2F%2F-success) ![tests](https://img.shields.io/badge/tests-104%20assertions-brightgreen)
 
 ## 特性
 
