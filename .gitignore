@@ -1,0 +1,32 @@
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.pyc
+
+# 打包产物
+*.zip
+
+# 一次性历史补丁脚本（保留正式打包与数据生成脚本）
+build/*
+!build/pack_release.py
+!build/gen_demo.py
+
+# 测试产物（截图 / 导出件）
+tests/shots/
+tests/dl*/
+tests/dl-*/
+tests/dl_real/
+tests/dl-acc/
+
+# 系统
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 本机真实测量数据（不入库）
+data/*.xlsx
+# 根目录重复副本
+/trend_demo_10P.csv
+
+# 测试夹具由 tests/make_fixtures.js 生成（仓库不含 xlsx）
+tests/fixtures/*.xlsx

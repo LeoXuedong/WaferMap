@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WaferMap v1.0.1 · 膜厚分布分析</title>
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">
+    <span class="logo">◉</span>
+    <span class="btitle"><b>WaferMap</b><span class="sub">膜厚分布分析 v1.0.1</span></span>
+  </div>
+  <div id="dsinfo">未载入数据</div>
+  <div class="acts">
+    <button id="btnImport" class="btn primary">导入数据</button>
+    <button id="btnExportAll" class="btn">导出全部</button>
+    <button id="btnExportCSV" class="btn">导出统计 CSV</button>
+    <input type="file" id="fileInput" accept=".csv,.txt,.tsv,.xlsx,.xlsm,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+  </div>
+</header>
+
+<main id="shell">
+  <aside id="panel">
+    <section class="grp">
+      <h3>数据</h3>
+      <div class="field"><label>数据源</label><div id="dsName" class="ro">未载入</div></div>
+      <div class="field"><label>X 坐标列</label><select id="selX" class="sel"></select></div>
+      <div class="field"><label>Y 坐标列</label><select id="selY" class="sel"></select></div>
+      <div class="field"><label>单位</label>
+        <select id="selUnit" class="sel">
+          <option value="Å" selected>Å</option>
+          <option value="nm">nm</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="grp">
+      <h3>统计</h3>
+      <div class="field"><label>小数位</label>
+        <select id="selDigits" class="sel">
+          <option value="0">0</option><option value="1">1</option><option value="2" selected>2</option>
+          <option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        </select>
+      </div>
+      <div class="field col"><label>显示项</label><div id="statItems" class="chips-box"></div></div>
+    </section>
+
+    <section class="grp">
+      <h3>色阶</h3>
+      <div class="field"><label>色阶</label><select id="selRamp" class="sel"></select></div>
+      <label class="chkrow"><input type="checkbox" id="chkReverse">反向</label>
+      <div class="field"><label>分级</label>
+        <select id="selLevels" class="sel">
+          <option value="0">连续渐变</option>
+          <option value="4">4 级</option>
+          <option value="6">6 级</option>
+          <option value="8">8 级</option>
+          <option value="12">12 级</option>
+        </select>
+      </div>
+      <div class="field"><label>取值范围</label>
+        <select id="selDomain" class="sel">
+          <option value="auto">自动（每图）</option>
+          <option value="global">全局（所有列）</option>
+          <option value="manual">手动</option>
+        </select>
+      </div>
+      <div class="field" id="manualRangeRow" hidden>
+        <label>Min / Max</label>
+        <input id="inpMin" class="num" placeholder="min" spellcheck="false">
+        <input id="inpMax" class="num" placeholder="max" spellcheck="false">
+      </div>
+      <div class="cbar">
+        <div class="cbar-grad" id="cbarGrad"></div>
+        <div class="cbar-lbl"><span id="cbarMin">—</span><span id="cbarMax">—</span></div>
+      </div>
+    </section>
+
+    <section class="grp">
+      <h3>Wafer Map</h3>
+      <div class="field"><label>符号大小</label>
+        <select id="selSignSize" class="sel">
+          <option value="8">8 px</option><option value="10">10 px</option><option value="12">12 px</option>
+          <option value="14" selected>14 px</option><option value="16">16 px</option>
+          <option value="18">18 px</option><option value="20">20 px</option>
+          <option value="24">24 px</option><option value="28">28 px</option>
+        </select>
+      </div>
+      <label class="chkrow"><input type="checkbox" id="chkInterp">插值面</label>
+      <label class="chkrow"><input type="checkbox" id="chkContour">等高线</label>
+      <div class="field"><label>插值方法</label>
+        <select id="selInterpMethod" class="sel">
+          <option value="tps" selected>薄板样条（精确过点）</option>
+          <option value="gauss">高斯核（更平滑）</option>
+        </select>
+      </div>
+      <div class="field"><label>插值格点</label>
+        <select id="selInterpRes" class="sel">
+          <option value="120">120 × 120</option>
+          <option value="160">160 × 160</option>
+          <option value="220" selected>220 × 220</option>
+          <option value="300">300 × 300</option>
+          <option value="400">400 × 400</option>
+        </select>
+      </div>
+      <div class="field"><label>平滑 σ</label>
+        <select id="selSmooth" class="sel">
+          <option value="0.2">0.20 锐利</option>
+          <option value="0.35">0.35</option>
+          <option value="0.55">0.55 偏锐利</option>
+          <option value="0.8">0.80</option>
+          <option value="0.9">0.90</option>
+          <option value="0.7" selected>0.70 默认</option>
+          <option value="1">1.00 平滑</option>
+          <option value="1.3">1.30 很平滑</option>
+        </select>
+      </div>
+      <label class="chkrow"><input type="checkbox" id="chkSigns">± 符号</label>
+      <label class="chkrow"><input type="checkbox" id="chkLabels">数值标签</label>
+      <label class="chkrow"><input type="checkbox" id="chkOutline">晶圆外框</label>
+      <label class="chkrow"><input type="checkbox" id="chkLegend">色阶图例</label>
+      <div class="field"><label>LSL</label><input id="inpLsl" class="num" placeholder="不设" spellcheck="false"></div>
+      <div class="field"><label>USL</label><input id="inpUsl" class="num" placeholder="不设" spellcheck="false"></div>
+    </section>
+
+    <section class="grp">
+      <h3>Lineplot 与直方图</h3>
+      <label class="chkrow"><input type="checkbox" id="chkMean">均值线</label>
+      <label class="chkrow"><input type="checkbox" id="chkSigma">±1σ 带</label>
+      <label class="chkrow"><input type="checkbox" id="chkFit">趋势线</label>
+      <label class="chkrow"><input type="checkbox" id="chkValues">图表数值</label>
+      <div class="field"><label>直方图箱数</label>
+        <select id="selBins" class="sel">
+          <option value="5">5</option><option value="8">8</option><option value="10">10</option>
+          <option value="12">12</option><option value="16">16</option><option value="20">20</option><option value="24">24</option>
+        </select>
+      </div>
+    </section>
+  </aside>
+
+  <div id="splitter" title="拖动调整设置区宽度，双击复位"></div>
+
+  <section id="main">
+    <nav id="tabs">
+      <button class="tab active" data-view="single">单晶圆</button>
+      <button class="tab" data-view="gallery">全量网格</button>
+      <button class="tab" data-view="stats">统计对比</button>
+    </nav>
+    <div id="subbar"></div>
+    <div id="viewRoot"></div>
+  </section>
+</main>
+
+<footer id="statusbar">未载入数据</footer>
+
+<div id="tooltip" class="tooltip" hidden></div>
+
+<script src="vendor/echarts.min.js"></script>
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/wafer.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/export.js"></script>
+<script src="js/views.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

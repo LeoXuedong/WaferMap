@@ -1,0 +1,24 @@
+'use strict';
+const path = require('path');
+const { launch, openApp } = require('./helpers/launch');
+const APP = path.resolve(__dirname, '..', 'index.html');
+(async () => {
+  const { browser } = await launch();
+  const { page, errors } = await openApp(browser, APP);
+  await page.waitForTimeout(700);
+  await page.screenshot({ path: path.join(__dirname, 'shots', 's7-single.png') });
+  await page.evaluate(() => window.WM.api.setView('gallery'));
+  await page.waitForTimeout(1600);
+  await page.screenshot({ path: path.join(__dirname, 'shots', 's7-gallery-map.png') });
+  await page.evaluate(() => window.WM.api.setGalleryTab('line'));
+  await page.waitForTimeout(1400);
+  await page.screenshot({ path: path.join(__dirname, 'shots', 's7-gallery-line.png') });
+  await page.evaluate(() => { window.WM.api.setProfileMerge(true); });
+  await page.waitForTimeout(1400);
+  await page.screenshot({ path: path.join(__dirname, 'shots', 's7-gallery-merged.png') });
+  await page.evaluate(() => window.WM.api.setView('stats'));
+  await page.waitForTimeout(900);
+  await page.screenshot({ path: path.join(__dirname, 'shots', 's7-stats.png') });
+  console.log('errors:', errors.length ? errors : 'none');
+  await browser.close();
+})().catch((e) => { console.error('FATAL', e); process.exit(2); });
